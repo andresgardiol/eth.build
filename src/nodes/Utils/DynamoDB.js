@@ -22,7 +22,7 @@ function DynamoDB() {
 
   this.properties = {
     title: "DynamoDB",
-    currency: "SomeCoin",
+    currency: "SomeCoin"
   };
   this.size = [640, 360];
 
@@ -61,58 +61,54 @@ DynamoDB.prototype.onDrawBackground = function(ctx) {
     this.destory();
   } else {
 
-    let items = [];
-    for (let t in this.items) {
-      let item = this.items[t];
-      let tableCells = Object.keys(item).map(key => {
-        return <TableCell style={rowStyle}>
-          <Blockies
-            seed={item[key]}
-            size={8}
-            scale={2}
-          /><span style={{ marginLeft: 4 }}>{item[key]}</span>
+    if (this.items.length > 0){
+      let items = [];
+      for (let t in this.items) {
+        let item = this.items[t];
+        let tableCells = Object.keys(item).map(key => {
+          return <TableCell style={rowStyle}>
+              {item[key]}
+          </TableCell>;
+        });
+        items.push(
+          <StyledTableRow>
+            {tableCells}
+          </StyledTableRow>
+        );
+      }
+      let someItem = this.items[0];
+      let tableHeaders = Object.keys(someItem).map(key => {
+        return <TableCell>
+          {key}
         </TableCell>;
       });
-      items.push(
-        <StyledTableRow>
-          {tableCells}
-        </StyledTableRow>
+
+      this.render(
+        <div style={{
+          overflow: "auto",
+          color: "#444444",
+          transformOrigin: "10px -20px",
+          transform: "scale(" + this.graph.canvas.ds.scale + ")",
+          borderRadius: "0px 0px 8px 8px",
+          background: "#CCCCCC",
+          marginLeft: -19,
+          marginTop: topPadding,
+          width: this.size[0],
+          height: this.size[1] - topPadding - 1
+        }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {tableHeaders}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {items}
+            </TableBody>
+          </Table>
+        </div>
       );
     }
-
-    this.render(
-      <div style={{
-        overflow: "auto",
-        color: "#444444",
-        transformOrigin: "10px -20px",
-        transform: "scale(" + this.graph.canvas.ds.scale + ")",
-        borderRadius: "0px 0px 8px 8px",
-        background: "#CCCCCC",
-        marginLeft: -19,
-        marginTop: topPadding,
-        width: this.size[0],
-        height: this.size[1] - topPadding - 1
-      }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                From
-              </TableCell>
-              <TableCell>
-                Value
-              </TableCell>
-              <TableCell>
-                To
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {items}
-          </TableBody>
-        </Table>
-      </div>
-    );
   }
 };
 
