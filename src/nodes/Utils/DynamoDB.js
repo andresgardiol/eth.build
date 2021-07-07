@@ -15,7 +15,8 @@ const StyledTableRow = withStyles(theme => ({
 function DynamoDB() {
   this.addInput("item", "object");
   this.addInput("add", -1);
-  this.addOutput("newAdded", -1);
+  this.addOutput("newAddedItem", "string");
+  this.addOutput("newAddedEvent", -1);
 
   this.balances = {};
   this.items = [];
@@ -51,6 +52,8 @@ DynamoDB.prototype.onAction = function() {
   let item = this.getInputData(0);
   console.log("NEW ITEM IS", item);
   this.addNewItem(item);
+  this.setOutputData(0, item);
+  this.trigger("newAddedEvent", item);
 };
 
 const topPadding = 50;
@@ -61,13 +64,13 @@ DynamoDB.prototype.onDrawBackground = function(ctx) {
     this.destory();
   } else {
 
-    if (this.items.length > 0){
+    if (this.items.length > 0) {
       let items = [];
       for (let t in this.items) {
         let item = this.items[t];
         let tableCells = Object.keys(item).map(key => {
           return <TableCell style={rowStyle}>
-              {item[key]}
+            {item[key]}
           </TableCell>;
         });
         items.push(
