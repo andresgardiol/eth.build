@@ -1,8 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { withStyles } from "@material-ui/core/styles";
-import { Table, TableHead, TableRow, TableCell, TableBody } from "@material-ui/core";
-import Blockies from "react-blockies";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { keccak256 } from "ethereumjs-util";
 
 const StyledTableRow = withStyles(theme => ({
@@ -62,6 +60,25 @@ DynamoDB.prototype.removeItem = function(item) {
 };
 
 
+function getBiggestItem() {
+  const maxKeysObject = this.items.reduce(function(prev, current) {
+    return (Object.keys(prev) > Object.keys(current)) ? prev : current
+  })
+  return maxKeysObject;
+}
+
+function createTableHeaders() {
+  let someItem = getBiggestItem.call(this);
+  const tableHeaders = [];
+  tableHeaders.push(<TableCell>Actions</TableCell>);
+  tableHeaders.push(Object.keys(someItem).map(key => {
+    return <TableCell>
+      {key}
+    </TableCell>;
+  }));
+  return tableHeaders;
+}
+
 DynamoDB.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
     this.destory();
@@ -77,14 +94,7 @@ DynamoDB.prototype.onDrawBackground = function(ctx) {
           </StyledTableRow>
         );
       }
-      let someItem = this.items[0];
-      const tableHeaders = [];
-      tableHeaders.push(<TableCell>Actions</TableCell>);
-      tableHeaders.push(Object.keys(someItem).map(key => {
-        return <TableCell>
-          {key}
-        </TableCell>;
-      }));
+      const tableHeaders = createTableHeaders.call(this);
 
       this.render(
         <div style={{
