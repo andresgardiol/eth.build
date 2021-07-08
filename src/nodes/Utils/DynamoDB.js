@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { withStyles } from "@material-ui/core/styles";
 import { Table, TableHead, TableRow, TableCell, TableBody } from "@material-ui/core";
 import Blockies from "react-blockies";
+import { keccak256 } from "ethereumjs-util";
 
 const StyledTableRow = withStyles(theme => ({
   root: {
@@ -16,9 +17,9 @@ function DynamoDB() {
   this.addInput("item", "object");
   this.addInput("add", -1);
   this.addOutput("newAddedItem", "string");
-  this.addOutput("newAddedEvent", -1);
+  this.addOutput("newItemEvent", -1);
+  this.addOutput("removedItemEvent", -1);
 
-  this.balances = {};
   this.items = [];
 
   this.properties = {
@@ -31,11 +32,9 @@ function DynamoDB() {
 
 DynamoDB.prototype.addNewItem = function(item) {
   console.log("add", item);
-  try {
-    this.items.push(item);
-  } catch (e) {
-    console.log(e);
-  }
+  let itemId = keccak256(getMillis() + item).toString("hex").substring(0, 6);
+  this.items.push({ itemId, ...item });
+
 };
 
 DynamoDB.title = "DynamoDB";
@@ -43,9 +42,7 @@ DynamoDB.prototype.getTitle = function() {
   return this.properties.title;
 };
 
-
 DynamoDB.prototype.onExecute = function() {
-
 };
 
 DynamoDB.prototype.onAction = function() {
@@ -53,11 +50,17 @@ DynamoDB.prototype.onAction = function() {
   console.log("NEW ITEM IS", item);
   this.addNewItem(item);
   this.setOutputData(0, item);
-  this.trigger("newAddedEvent", item);
+  this.trigger("newItemEvent", item);
 };
 
 const topPadding = 50;
 const rowStyle = { fontSize: 20, letterSpacing: -1 };
+
+DynamoDB.prototype.removeItem = function(item) {
+  this.items = this.items.filter(element => element.itemId !== item.itemId);
+  this.trigger("removedItemEvent", item);
+};
+
 
 DynamoDB.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
@@ -67,24 +70,21 @@ DynamoDB.prototype.onDrawBackground = function(ctx) {
     if (this.items.length > 0) {
       let items = [];
       for (let t in this.items) {
-        let item = this.items[t];
-        let tableCells = Object.keys(item).map(key => {
-          return <TableCell style={rowStyle}>
-            {item[key]}
-          </TableCell>;
-        });
+        let tableCell = createTableCell.call(this, t);
         items.push(
-          <StyledTableRow>
-            {tableCells}
+          <StyledTableRow key={this.items[t].itemId}>
+            {tableCell}
           </StyledTableRow>
         );
       }
       let someItem = this.items[0];
-      let tableHeaders = Object.keys(someItem).map(key => {
+      const tableHeaders = [];
+      tableHeaders.push(<TableCell>Actions</TableCell>);
+      tableHeaders.push(Object.keys(someItem).map(key => {
         return <TableCell>
           {key}
         </TableCell>;
-      });
+      }));
 
       this.render(
         <div style={{
@@ -115,5 +115,23 @@ DynamoDB.prototype.onDrawBackground = function(ctx) {
   }
 };
 
+function createTableCell(t) {
+  let item = this.items[t];
+  let tableCell = [];
+  tableCell.push(
+    <TableCell style={rowStyle}>
+      <button onClick={(e) => this.removeItem(item, e)}>x</button>
+    </TableCell>);
+  tableCell.push(Object.keys(item).map(key => {
+    return <TableCell style={rowStyle}>
+      {item[key]}
+    </TableCell>;
+  }));
+  return tableCell;
+}
+
+function getMillis() {
+  return new Date().getMilliseconds().toString();
+}
 
 export default DynamoDB;
