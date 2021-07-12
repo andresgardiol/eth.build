@@ -14,7 +14,7 @@ const StyledTableRow = withStyles(theme => ({
 function DynamoDB() {
   this.addInput("item", "object");
   this.addInput("add", -1);
-  this.addOutput("newAddedItem", "string");
+  this.addOutput("newAddedItem", "object");
   this.addOutput("newItemEvent", -1);
   this.addOutput("removedItemEvent", -1);
 
