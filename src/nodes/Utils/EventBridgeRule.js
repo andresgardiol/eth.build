@@ -3,7 +3,7 @@ const keccak256 = require("keccak256");
 function EventBridgeRule() {
   this.addInput("key", "string");
   this.addInput("value", "string");
-  this.addOutput("output", "object");
+  this.addOutput("rule", "object");
   this.size = [160, 100];
 }
 
