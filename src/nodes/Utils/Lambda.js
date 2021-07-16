@@ -20,7 +20,7 @@ Lambda.prototype.onAction = async function() {
   console.log(`%cSTART - LAMBDA ID: ${this.properties.id} - ${getToLocaleTimeString()}`, "color: green");
   setTimeout(() => {
     this.setOutputData(0, input);
-    this.trigger("finish", "");
+    this.trigger("finish", input);
     console.log(`%cEND - LAMBDA ID: ${this.properties.id} - ${getToLocaleTimeString()}`, "color: green");
     console.log(`%cREPORT - LAMBDA TOOK: ${this.properties.executionTime}ms TO COMPLETE`, "color: orange");
   }, this.properties.executionTime);

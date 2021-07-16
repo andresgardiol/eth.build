@@ -21,8 +21,7 @@ function DynamoDB() {
   this.items = [];
 
   this.properties = {
-    title: "DynamoDB",
-    currency: "SomeCoin"
+    title: "DynamoDB"
   };
   this.size = [640, 360];
 
@@ -53,31 +52,6 @@ DynamoDB.prototype.onAction = function() {
 
 const topPadding = 50;
 const rowStyle = { fontSize: 20, letterSpacing: -1 };
-
-DynamoDB.prototype.removeItem = function(item) {
-  this.items = this.items.filter(element => element.itemId !== item.itemId);
-  this.trigger("removedItemEvent", item);
-};
-
-
-function getBiggestItem() {
-  const maxKeysObject = this.items.reduce(function(prev, current) {
-    return (Object.keys(prev) > Object.keys(current)) ? prev : current
-  })
-  return maxKeysObject;
-}
-
-function createTableHeaders() {
-  let someItem = getBiggestItem.call(this);
-  const tableHeaders = [];
-  tableHeaders.push(<TableCell>Actions</TableCell>);
-  tableHeaders.push(Object.keys(someItem).map(key => {
-    return <TableCell>
-      {key}
-    </TableCell>;
-  }));
-  return tableHeaders;
-}
 
 DynamoDB.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
@@ -124,6 +98,31 @@ DynamoDB.prototype.onDrawBackground = function(ctx) {
     }
   }
 };
+DynamoDB.prototype.removeItem = function(item) {
+  this.items = this.items.filter(element => element.itemId !== item.itemId);
+  this.trigger("removedItemEvent", item);
+};
+
+
+function getBiggestItem() {
+  const maxKeysObject = this.items.reduce(function(prev, current) {
+    return (Object.keys(prev) > Object.keys(current)) ? prev : current
+  })
+  return maxKeysObject;
+}
+
+function createTableHeaders() {
+  let someItem = getBiggestItem.call(this);
+  const tableHeaders = [];
+  tableHeaders.push(<TableCell>Actions</TableCell>);
+  tableHeaders.push(Object.keys(someItem).map(key => {
+    return <TableCell>
+      {key}
+    </TableCell>;
+  }));
+  return tableHeaders;
+}
+
 
 function createTableCell(t) {
   let item = this.items[t];

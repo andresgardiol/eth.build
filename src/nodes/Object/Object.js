@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom'
-import { TextField } from '@material-ui/core';
 
 let debounce
 
@@ -53,19 +51,15 @@ ObjectObject.prototype.onExecute = function() {
     this.parseInput(true)
   }
 
-  //console.log("OBJECT VALE",this.value)
   let index = staticInputs
   for(let key in this.value){
     let thisInput = this.getInputData(index)
-    //console.log("INPUT AT ",index,"is",thisInput)
     if(typeof thisInput != "undefined" && thisInput != null && (typeof thisInput != "number" || !isNaN(thisInput)) && thisInput!=this.value[key]){
-      //console.log("UPDATE VALUE!!!")
       try{
         this.value[key] = thisInput
       }catch(e){
         console.log(e)
       }
-      //console.log("NOW:",this.value)
       this.properties.value = JSON.stringify(this.value,null,2)
     }
     index++
@@ -86,23 +80,6 @@ ObjectObject.prototype.onExecute = function() {
     this.hasProcessedOnce = true
   }
 }
-
-/*
-ObjectObject.prototype.onConnectionsChange = function(type,slot,connected,link,obj){
-  //watching for new, empty object, and populating it by referece hehe
-  //if( type==2 && slot==0 && connected==true ){
-    //setTimeout(()=>{
-      let current = this.getInputData(0)
-      console.log("CURRENT:",current)
-      console.log("keys",JSON.stringify(current))
-      current = {
-        "to":"test"
-      }
-    //},1000)
-
-//  }
-}*/
-
 
 ObjectObject.prototype.parseInput = function(force){
   try{
@@ -163,12 +140,10 @@ ObjectObject.prototype.parseInput = function(force){
     links = []
     correct = true
     for(let key in this.value){
-      //console.log("CHEKCING OUTPUT ",index,key,this.outputs[index])
       let currentLinks = null
       if(!this.outputs[index] || this.outputs[index].name || this.outputs[index].name != key){
         if(this.outputs[index] && this.outputs[index].links){
           currentLinks = this.outputs[index].links
-          //console.log("get currentLinks",this.outputs[index])
         }
         correct = false
       }
@@ -177,7 +152,6 @@ ObjectObject.prototype.parseInput = function(force){
       let linksArray = []
       for(let l in currentLinks){
         let link_info = this.graph.links[currentLinks[l]];
-        //console.log("SAVING",link_info)
         linksArray.push(link_info)
       }
       links.push(linksArray)
@@ -197,7 +171,6 @@ ObjectObject.prototype.parseInput = function(force){
           for(let l in links[i]){
             let link_info = links[i][l]
             let target_node = this.graph.getNodeById(link_info.target_id)
-            //console.log("CONNECT",link_info)
             this.connect(thisIndex,target_node,link_info.target_slot)
           }
         }
@@ -215,7 +188,7 @@ ObjectObject.prototype.parseInput = function(force){
 
 ObjectObject.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
-    this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
+    this.destory()
   }else{
     this.render(
       <div key={"object_"+this.id} style={{marginLeft:0}}>
