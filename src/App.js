@@ -7,7 +7,6 @@ import './App.css';
 import LiteGraphJS from 'litegraph.js/build/litegraph.js'
 import 'litegraph.js/css/litegraph.css'
 import CustomNodes from './CustomNodes'
-import ICON from './icon.png'
 import StackGrid from "react-stack-grid";
 
 import QrReader from "react-qr-reader";
@@ -51,11 +50,6 @@ global.modules = {
 }
 
 const touchHandler = (event)=>{
-
-
-
-  //console.log("global.showLibrary",global.showLibrary)
-
     var touches = event.changedTouches,
         first = touches[0],
         type = "";
@@ -67,10 +61,6 @@ const touchHandler = (event)=>{
         default:           return;
     }
 
-    // initMouseEvent(type, canBubble, cancelable, view, clickCount,
-    //                screenX, screenY, clientX, clientY, ctrlKey,
-    //                altKey, shiftKey, metaKey, button, relatedTarget);
-
     var simulatedEvent = document.createEvent("MouseEvent");
     simulatedEvent.initMouseEvent(type, true, true, window, 1,
                                   first.screenX, first.screenY,
@@ -78,40 +68,17 @@ const touchHandler = (event)=>{
                                   false, false, false, 0/*left*/, null);
 
     first.target.dispatchEvent(simulatedEvent);
-
-
-
 }
 
 
 function App() {
   console.log("APP")
 
-  /*
-  window.addEventListener("wheel", event => {
-    console.info(event.deltaY)
-    event.preventDefault();
-  });*/
-
-
   const [menu, setMenu] = React.useState("");
-
   const [selectToolActive, setSelectToolActive] = React.useState(false);
-
-
-
-
-//  var defaultPrevent=function(e){e.preventDefault();}
-//document.addEventListener("touchstart", defaultPrevent);
-//document.addEventListener("touchmove" , defaultPrevent);
-//
-//
-//
   const [moreInfo, setMoreInfo] = React.useState(false);
-
   const [drawing, setDrawing] = React.useState(false);
   const [drawingColor, setDrawingColor] = React.useState("#03A9F4");
-
   const classes = useStyles();
 
   const [snackbar, setSnackbar] = React.useState({msg:"",color:""});
@@ -143,24 +110,15 @@ function App() {
   const [showVideoLibrary, setShowVideoLibrary] = React.useState(showLibrary);
   global.showLibrary=showLibrary
 
-
   const dynamicWidth = window.innerWidth/3
-  /*
-   document.ontouchstart = touchHandler
-   document.ontouchmove = touchHandler
-   document.ontouchend = touchHandler
-   document.ontouchcancel = touchHandler
-   */
 
     document.addEventListener("touchstart", touchHandler, {passive: false});
     document.addEventListener("touchmove", touchHandler, {passive: false});
     document.addEventListener("touchend", touchHandler, {passive: false});
     document.addEventListener("touchcancel", touchHandler, {passive: false});
 
-    //console.log("ADDING KEY DOWN!!!",document.onkeydown)
     document.onkeydown = (keydown)=>{
 
-      //console.log("EVENT")
       if(keydown.key=="Escape"){
         setMenu("")
         setDrawing("")
@@ -240,7 +198,7 @@ const [{ isOver2, isOverCurrent2 }, drop2] = useDrop({
 React.useEffect(()=>{
   console.log("MOUNT",LiteGraphJS)
 
-  global.title = "eth.build"
+  global.title = "aws poc"
 
   global.LiteGraphJS = LiteGraphJS
   var graph = new LiteGraphJS.LGraph();
@@ -332,15 +290,14 @@ React.useEffect(()=>{
 
               //THIS IS THE DEFAULT FIRST TIME LANDING CASE
 
-      let defaultData = "wofCrGxhc3Rfbm9kZV9pZMONASfEgcSDxIVsaW5rxIvEjQI7wqXEh8SJc8OcABPCisKixIzEjhLCpHR5cGXCrElucHV0L051bWJlcsKjcG9zwpLDjQJ2w4zCqsKkc2l6ZcKSw4zCgjTCpWbEgmdzwoDCpW9yxIlyAMKkbcSIZQDCpsSVxLB0c8KRwoPCpG5hbWXCoMSoxKrFnMKkxJTElsOAwqdvxLHFoMWixaTFpsWoxarEqcSrwqZuxLXEt3LCpcWva8WixL8vwqpwcm_Eq3J0aWVzwoPCq3DEgmNlaG9sxZbCoSPCpcaOdGxlwqbEtMS2xLjCpXZhbHVlwqQxMzM3xKPEpQEUxavEq8KrTWF0aC9SYW5kb23EusS8xL4CbMSOIsWExYbFiMOMw4gexY3Fj8WRxZPFlcS4AcWZxZvFncWfxLHFtsWlxafFqca2ZcO_xa7ElWvFscWzdMW1wpHChMeexajGp8apxqvHocW9xb_GpsaDxoUCMMaCYcS3bMOLQ8Khw5QoG8OIw7NcxojGisaMxo7GkMKDwqlhxLHHgsa6aWPDg8KjbcSVAMiVYXjHvsKrw4FtZ07DiADGssSNARPHocKtxrnGuy9NdWzGjsaUeceExL3DjQN6x47Hi8WHwpJ4PMeRYcWQxZLFlMWWCceYxInHmsSvx5zCksW3x5_CoUHHssW-xqVyx6TElsaGyYvFqMKhQsmPx7TJksaDxL8wxbLFtMecxaPHrWXCoT3JmsmRxoLHpce3MciHxovEuMiKxpHJjcONBTnJmMe-yIDIgsiEXMKiT1DCoSrCicSkyKUWx6HCr0Rpc8aUYXkvQmxvY2vGj8izxL4ETMSOQMi5xYhGyL3Fjsi_x5PJgsS4D8mFxZzFnsmIxaHJo8W4x6DFu8WtyZ0CMsmuyInGj3PChMKrYsqQypLGj1PHjDLGk8aVxpfGmcWWwqDGnmnGoMWpx6_GqmXDmUIweGM4YjgwZmVmNTnLkmE4NmZhNzRkYTnHuzUyxIkyMTHLkDkwOMumMDXGrzNjOTg3YWUxZjTLljRjY2EyNcucNWHIpMSOGMqGQ3LEqnRvL0tleSBQYWnEucS7yLQBw4jEv8O4ypvCgsKhMMOKQ1PCmcKawqExQsi-yYDHlMWWDcqlyYfFtcmKyaTCrVvGiWnGqHRlIGvMk13HssSEcsSVZ8mTa8S_NsmWZcKoZ2VuxLjGusasyq3Ho8aDx6fJocWhwpPNisaTzYPMusy8zL55zYF0zYNuZ8mqxJbHtzjNisaIdcq4yJLMvcyTzaHNo82lx7bDgM2KwqdhZGRyxpBzzbHNhM2mxoTCkcS_OcqyybDKtMKAzIgBFcehwqvMjMyOzJBIxINoypXItcKixI5KypvIu8eQyp_MrcqicgzMscqnx6rNisKlx5t0yKjNgs2ELMmQxoDNhsS_Mcmgx6nJos2KwqRozpLNvs2kzoDItMqwxL86zoXGjc6HzokgyKjKiMqKxILKjVfGumPOk8yaypYkw4zCtM6ZyLUxyp7HksmBx5VyEM6hzqbFosesyqvFusWsxZjKrzrHuse8wqDOsceqz57Hn8-gxKsAzrrDgM-lZWzCoM6_ybHCgcuFy4fCpc-JdM-Lzokhx6HCqsSuxaAvVGV4dM6UAsKUxI7Dgs-SAn8yzKzKoc-YAs-byqjHnc-fx6HPoselzZbOssqpzYrPrMaizqnOuce2zoLEms-1yrTKtsq4ypHKk2XKvMWHyr7Ki8aWxpjGmsS4wq_Njsy7ciDMu9CHIGjEuGXPuMahwqtMZWFybiBNxZRlz6TGqMuKw5lIaHTHqXM6Ly930ZoueceozaxlLmPHgi_Ki3nElMSEP9GndD1QTEp6MUhydUXNj25DWEg3S1c3d0JDRUJuQkxPVsqTcUlpzokez4TKidGlL8-7z4vOlAHDvsS_ds-SA8-U0JLPl8WWEdCWz6nJpNCh0JvJlAI4z7HPs8-oyaLPqsW50JrPr9Kpz7TGicmvz4DGkM-3xp_Goc-6z4poyoLGs8eKyq3Cqs-F0pFRUs6UBcKWxI5Uz5IBwpDEjsKQ0p3MrsS4CtKh0qzSo9Cazq7EmtKp0ZHRk9GV0ZfRmdGb0Z3EsdGf0aHRo9Gl0arRqcqJ0avRrdGv0bHRs9G1zY7RuNG60bzRvtKA0oLShNKG0ohp0opp0KjGkMKCwqZxctCvZcyJyapn0ZPDgsKIyoPEjiPSj8-GyozQhMuGxqHKlUbFitOLw7TPrs6c0JPFlgPMsdO9c8KHwqhmb2501IMsyrfKudCt1IPQscuA0LTLg9GC0YFU1JLRgdGPxqvCqWXGuy5idWnGmsKq1KPUpUbFp9S-ecK8J1LNrGlr0YrUpG8gT82PJywgc8a_cy1zxLhpZsKl0aLKkHLCpyPNudWkZM6JGcyLzI1wzI_IrM2PxZpuyJLKlcOM04gDSMygzKLMpDpmZsypzKvUmtKexLgL05TNmM2qW23VrtSkyJLNgMqtwqbQo82FzZXNtlvElcSJeNaLxazHs8mRzYbNtcmkzYzNjs2QzLvHoc2Ux6XEvzXSq8WhzLTKq82bzLnNkc2vzaDWjNaOzrrQps2J1pzWh2XVr8iSzrjNs8mr0KY31J_Pt9aT0IYA0r3IpR_KhtOCz4cvQc25zbtzc86UAwzItdCVxYXIutOJUNOQzp7Ep8WayYbOos6z05bKrdKlzYcCzoTSs8qzyIvUqdCsyrvKvcq_YdCzy4LEuMuE0rhlwqfXis26zbzOiR3UjtKR0pPPjMeFxI7CpMi1x6zXlMWIyLXDvc-VyqDWgHIO1oPPndefz6HTmDfSsdam2I3Qmdeg0rDEgs-m1r7UsdK6z7xo1IrGsyTXhtKQ14hDx4LFqNSlypUew4zDsNSX1JnPltORcgTUntelzobGkMKE1KLUpNSmx4wS16zXrtC1csKu0Zgg0aJt2KfFoS7ZiNSxwqfYpdmF0LjLicary4zDsMKfwpPCnSBDUkVBVEUgQSBORVcgQlVJTEQ6CmjLhtmDzaJsK2HQu9WP1ZrGoWN0IMapbNC70L_Ridmr2bfEicahzLsg2J_IpSfYotSPyo3ZjNmG2KnEjl7YrdeYz5gF2LPIiNi1yrXYuNSl1IPYvNCyy4HYv9mBL9mD2KbQuHPZiC7ZitqK2Y7UtsuLwoTZksKVwrXZksKPwrvDosKAwo3DosKZwoLDr8K4wo8gU9mZUkNI14lE2ajQvtmsyorXrcy8YtGH2bjHgNC7xawKw6LCncKMIEVYSVTGvUXavFQ624TZt8aQzIHEqwrZqm92xLgg26TbpsyPxplz26fRica7zLzNg9SH255kzY0g1KPQusWazbsgLdu8270-2oTEjibah9KR2qfYqM-NHsSOw7Taj9W_2LAG2pPStMmx2LfVgdi6xYfamtSu16_ZgNmC2YTZhtqj2YnXstmL2qHUpdmPy4te2ZLCp8KQIEzavU7Rik_ZmNucY8SUypLZu9uIb9GUx4LQu3LKjNu2xZQgZXDKicWb26wK2ZLCksK-2rtBVkXcsNyy1YzVltulIMiS1KTdkdGJYty2zI9t3LnKjNyAASXcg9ik3KHQiM-NMsS_bNOLTQTakMWWB9yP16baltyT2pnYvdqcxZbantqg2Y3Updyd2qXcn9yFdNyjw5kg3YXCrNu2ZWVk24nKktucQMiOxITNhM2D1bvLhmggIM6JG8ehxK3KqMqOxLHMj27ajALDms6Zx47QkdSawoHCqdWfxIJw1Zpkw4LYsAjYjMqqz6vWodaa2JPWqN6wzZPWsdak0KDHocKuzqzEuCzdlsaZ0YZuz6_Un8KD3KPCqNyxyJLVjMeu17LCpkLemtSk1Z7Fs9SlEM66wpvTiAIvxKYAxI4TxZ3evHLflzDEjhTfm8imAdaYxoDflzHfnN-lFQDCrdaOzqvJm9-X3aTOit-lFgAA35c1xI4b36UZAsO_35c2xI4Z36UYxZ3Wjt-XN-CghQHEjh3fud-XOMyJ36Ue4KCRzoPMiQLEjh_goJcCOsSO367EjiDgoJ07xI4h36Ui37nCpmfGinXeqMKQwqbRom5maWfCgMKn26VyxYXUpMOLP8OZwpngoYDgoYDCmg"
+      let defaultData = "wofCrGxhc3Rfbm9kZV9pZBfEgcSDxIVsaW5rxItkGcKlxIfEiXPDnAATworCosSMA8KkdHlwZcKsVXRpbHMvTGFtYmRhwqNwb3PCksONA8KYasKkc2l6ZcKSw4zCoDzCpWbEgmdzwoDCpW9yxIlyDsKkbcSIZQDCpsSTcHV0xLnCg8KkbsSxZcKlxZrFnMSkxKZlwq1vYmplY3QsxIRyxJNnwqTEksSUAsWfxaFtZcKndMWzZ2dlcsWnxKfDv8W2xJNrA8Knb8WcxZvFncKSxbrFosKmxo10xo_GhcWpxavFrcWvxbHFv8W0wqXFt2tzwpEExpLFvMKmZsSTaXNoxpjDv8agxonGowXCqnByb8SncsSrZXPCgsKtZXjFrsWcaW9uVGnFvMONB8OQxKFkwqk3NjlhMTg3MWXEoMSMBsaYwqtPxazFrnQvSlNPTsS2xLjEugbDtGnEv8WBxYPDjMKMHsWIxYpzwoHCqWNvbMSCcHNlZMODxY7FkMaDEcWUxZbFmMWlxZ3CkcamZcKjxprGmADGiMSUBsaMxo7FnMajyIrCpGpzx4TGmMKmxbLGn8ahxqMHxrTGtsa4xrrHtMKldmFsdWXDmSZ7InRvIjoixKd0xoMiLCJmxrZtyLQiYsWryLoiyKnIq2XItDEwfceYZAvGmMKqSW7Gjy9Uxr90x6bEucONAcOEw40Cb8esxYLEugEsMseyYcWLx7XHt8e5Yce7x73Hv8WPxZHIj8WVxInIhsmTyJXIicWgxaLCoMiOyJBrw4DIk8aWybjIism8xKXEp8idxp5uZ8awxJTGowrIo8a3xoPIpsKEwqtibG9ja2llU8etMsKrcMSCY2Vox7jFkcKvZW7IuHIgyLh4dCBoxoPFo8SrdGxlwqTJlsqvyKjIqsiswqLIssmNBMaYwq7EqsSsxK5EecW7b0RCyZnEugRWUMmhxYPJnsKAyZtoyafFi8WNybHGgxDIhMm1xZnJt8aQyJdpyLhtyJzGmsefyb7Gpcm6xbzCo2FkZMauyb4FyoHGj3PCk8iKwqxuZXdBy7HHvUnLpsuox57Fr8qMxqLCkQbLusu8d8yCZW1FdsqpdMauzIfGowjIisKwcsyPb8ySZMyOzJDMksqqzJXIoMOAypDIpcqbyKfKtcq3wqjLiMuKy4zJjQfGmMKxTmV0d8WPay9TdWJzY8WzYsiLxLfJmgEHyZ7LgsWAxYLCgsKhMMmbJsKhMTvLmcWMyIDFkQHLn8WXy6HLt8m5xbtlwqlbY2hhbsu8bF3InMieyorJvsqAxpXLt8aRy63FvcW8c3PJqMq4yoZlyojFs8qKzJbCkQnIisKozJvKo2nMnsykxrHMpsa1ypHGucypwoLCp82izaTNpsKxy7zMt8y5Lsy2aC5idcSsZMKnzpPMuHJrw5nKsXTGlnM6Ly_On86VzpfOmc6bbGQ6NDQzODYvyY3Ig824xKnEq8StxK_EscSzxLXNhMuPJMmeCMuTxYTFhs2Uy5vIgXINzZnJts2vyIrFpMuixpjFqsyFxbDNqsW1xqESyIrFvsaAxoLGhM24xofGoRPLtsiVzbDNnsaUyJTMlM24z5fGm8-ZyonKi8igwpEUyIrGqMaqxqzOhsqNwpEVzKfKks6Mxr7HgGPHgseEx4bHiMeKx4zCqTXKozc1YseSM8mNDMmQyZLJlMq6yZjPg8mbwqbJnsKhz4jJm8mlzZTJqse4x7rHvMe-zZbGgwLPkM2byoPNscqFxajIj8ahza3PrMiW0K7Nqc-yzb0Lz7_Oi8a7ypTKlsqYyprKnMqeyqDKosqkyqbGg8qoyqrGg8qtyZfKscqzwqXMq8q40JjKvMmHwqXIt8aDwonHjAXGmMKvzLXOlM6hL1DMvcSSxqzLjsONBsOqy5LNimXNjM2OAS3NkUXPi9CochLQq8iHy7jIis2gzo_NpWXNp9C3zbvPm8aJw4DPns2zzbXGgtKAxbTJvgfPnsWbypbGq8atz6PJvgjQu8imzo3RvM6RzqvOoc6WdM6YzprOnM6ezLbOoM6izqTOps6ozqrSos6s0p3Ors6czrLOtM62zrjHjM2YzbjCsMuFzr5BcGlHYci4d2F50aYCwrJuz4jDjMOIbtGzy5xy0JTJtM2a0bjNncWiwqfMm3HIrMSEzITPsMm-Ac-ny6PNsc-ryoLPrcWoxpTPmM29xbnNscKlZcyi06DGhs29A9KVzKnCgdGQy6XKt8Kq0rjSutK8y73Sv8mN0KrPrsedz7Av073Hn9GmAVTHr9CfAUnLmMWJyajHtMe20KTJrdCmw4LRtArRt8uic8KUyoTTl8uq0LLIisq_yaDNuMK0z5osbnXEssaDLMupxa_JvhnIl8i9b8un1J_UodSj1KVy1KfPmM2sz5PJhsisxpjUoM-y1KLUpM2C1LTUqMyU0LLTm9SW1JjNuNOiz7DNvQHUnMiy0onNq9SbzbHCpNSt1K_Toc-a1LfTptS5zbfTodSy1YDNrNOu0L3Tscq2zbnUgMyGyavFj8KnIzVh1avVq8KoZseEdMqdxYIQ0ZTIrMOZM3sKICDIscizOtW9yKppyqPIutW71b3VlMi01b3JgmLWhdW8yYXKvcmI1oDJigrJjMeMD9CVy6LJlcmX1ILCkMmbItOFwr8404nPjcSj043PkdCtzZ7Qr8Sn0LHSg9WF05DFvNaqzbnPms29GdWgc9C-ypfKmcqb1bNlyp_KoWHKo8qlzrDRiMyT0YvKrsqwyrLMm9WiyrfKucmX1bbFo9aCyqPCiMeME9GcRMar1r95L0PUrsW8yqrLjsO2w4zDsNSGTgTWo8WRy4LWpta2woTVr9Wx1rwS0YTXgNGG14Nywq7OqSDHt23XnsWdLte914vFvdec17rMk9ePw5nCpFDMm8WAx4RhIMqp1b1ORVcgRVZFTlQiIHkgbWly2IvXuW8gx7wgxJPHvMa52It1biDUo9Oo2KHLpcyP2IzYqiJEWU5BTU_LjCIuCkzIrGfYoWPPgGnYi9G-0YzKr9ihIteRyYggxLfKrMi2zLbIudiZIMWr2KbIqSDTlMODwqnZjcSD2J_HhNiMbNW92LTYtti42LrYpG5mxoPHg3LXk8SMFc-W15dz15nJldOyzYPHpwoo1IbDtADXp8aD0ZvXqs6JzKjGu8KH163Kqta8LMqV1rnRgda81r7RhdeCxZHCoNe_wqXHhtWj14_Cp0FXUyBQT0PCqtWwyqpGxLHErHnCvCdSzL1payBNx4TYoU_LvCcs2KLNpHMt2KZpZsKl1ady1anLsdq_ZMmN1JPPrtK2xK5FQl_aqMq304FOyZ5x04XCoGTZvXIJ1JTPks2xwqNrZXnVj9KCxJQK1LjWkNudyb4L1q7Il3J114zViNWCzb0N1rbCgMmNz4_NuMKx24UvzJHMk0LFs2TGgtGmAwzPhtSGBNuS1IrLmtG0yY_WptCsxZ3LudOmyIfUmdSpxqEM26fbqdWbyofVgsm-Dc-exp7GgcaDy7PGoQ7Vhc-pxpPNrsWm26vTo8-0z53Qts-jzb0T26_Jjc-HzrvVpcegUGFyx7zTgWzcgNGr0a3Hr82RLtuTz4fciNOPyJfImcib1YjVl8ahCdygyIrIjMWsxpjakc-03JHcqcWoxq_PtA7crceM0bbNuMuEzr3Lh8uJxLHLi8uN0JoEw6LcucetxLoCy5YB1InHs8-MxZHWl92B1JXcocW8wqTYr9WV3JXUtsahz7bbmMuwy7LSksahFdWF3IvNnsu7y73Lv8SJzJ_Mg9yl1YrMpcyLy73MoNu3zKPcqt6MzbHMmsyczJ7ej9Opz7vGos6IyKTQgMa707DRkcyt3Z7FlcuM2a3EjdeW15jEgtea2IHXu8uOAMS70JTRq8mjwo_XptyEzZXTisea2oDendC81rfahdWyx63XsNa_14HRh9e117fXude7c9e93L7RkcKn3qzYg9Waw5nChMOwwp_ClcK135PCj8K7w6LCgMKNw6LCmcKCw6_CuMKPIFNFQVJDSC9BRETWgGjLpdiicNeyINCQyqzNpGTKrcWoCsOiwp3CjNiSWElUL1JF36RU367fsMa72YLEpwoKyqXMksqszJ3Xhm_HuHPZlNiq0p1lIMaAaMqwx73GgiDVsMqsxZXMmyAt4KCn4KCoPt6mFt6o2bLeqteb153Mk8uOCsuV1IbetNuTzLLeus6KypPevtev17Hfg9e017Yv17jgoLHKqt-J177fjN-OyqrYhEDfk8KTwp0gQ-CghEFURSBBINiP2JHanEM64KCO37DFr3JsK9iLyLLYotG-x58gyKrZoeCgmdiq36_KsMSJyrfIuCDMlsSdE8KWAQIAAcWY1YLClgLgobwDAM-vx5_GndKBwpYDAQHgoonDv8KWBOCiggTgob3PmMKWBeCiiQQB4KKNBuCikQYAAMKWB-CinAUBzbrFtMKWCOCilwUC4KKNCQcACMWYz5rClgoLAArgorDPssKWCwzgorXgoqPgorEM4KKvDeCiks-wwpYN4KK2DeCio-Chvg4IAQ3goqrClhLgo4ER4KKD1YLgoobgoqUT4KOHEeCimMKWFOCjkhLgo4LHn8KWFeCjmRLgo5oZDwDgooDUvNKB1L7Us9S1z7DCpmfGtnXHu8KQwqbHt9moaWfCgMKn4KCQ2Iluw4s_w5nCmeCkg-Ckg8Ka"
       codec.decompress(defaultData).then(json => {
         global.graph.configure( json )
-        //graph.start()
         graph.canvas = canvas
         setLiteGraph(graph)
         setLiteGraphCanvas(canvas)
 
-        setShowVideoLibrary(false);global.showLibrary=false; //lets try starting down with the video up
+        setShowVideoLibrary(false);global.showLibrary=false;
       })
     }
   }
@@ -1121,43 +1078,6 @@ return (
       </div>
     </div>
 
-
-
-
-
-    {/* <div style={{position:'absolute',bottom:-100000,left:-100000}}>
-      <span style={{border:'1px solid #777777',color:live?"#00ff00":"#0000ff",padding:5,cursor:"pointer"}}>
-        <input id="loadjsonfile" type="file" name="file" onChange={(e)=>{
-            console.log("FILE",e.target.files[0])
-            var reader = new FileReader();
-            reader.onload = (event) => {
-              let compressedString = event.target.result
-              //console.log("compressedString",compressedString)
-              let loc = compressedString.indexOf("<string>")
-              if(loc>0){
-                loc += 8
-                let endloc = compressedString.indexOf("</string>",loc)
-                //console.log("loc",loc,"endloc",endloc)
-                compressedString = compressedString.substr(loc,endloc-loc)
-                compressedString = compressedString.substr(compressedString.lastIndexOf("/")+1)
-              }
-              console.log("decompress:",compressedString)
-              codec.decompress(compressedString).then(json => {
-                console.log("configure graph with:",json)
-                if(json){
-                  localStorage.setItem("litegraph",JSON.stringify(json));
-                  liteGraph.configure( json );
-                }
-              })
-            }
-            try{
-              reader.readAsText(e.target.files[0])
-            }catch(e){console.log(e)}
-          }}>
-        </input>
-      </span>
-    </div> */}
-
     <div style={{position:'absolute',bottom:-100000,left:-100000}}>
       <span style={{border:'1px solid #777777',color:live?"#00ff00":"#0000ff",padding:5,cursor:"pointer"}}>
         <input id="moduleloader" type="file" name="file" onChange={(e)=>{
@@ -1165,18 +1085,6 @@ return (
             var reader = new FileReader();
             reader.onload = (event) => {
               let compressedString = event.target.result
-
-              /*
-              let loc = compressedString.indexOf("<string>")
-              if(loc>0){
-                loc += 8
-                let endloc = compressedString.indexOf("</string>",loc)
-                compressedString = compressedString.substr(loc,endloc-loc)
-                compressedString = compressedString.substr(compressedString.lastIndexOf("/")+1)
-              }
-              console.log("decompress:",compressedString)*/
-
-
                 if(compressedString){
                   let json = compressedString
                   //  codec.decompress(compressedString).then(json => {
@@ -1222,13 +1130,9 @@ return (
           <div style={{cursor:"pointer",letterSpacing:-5,borderBottom:"1px solid #999999",borderLeft:"1px solid #999999",borderRight:"1px solid #999999",fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}
             onTouchStart={
               async ()=>{
-                setShowVideoLibrary(false);global.showLibrary=false;
-                localStorage.setItem("eth.build.showLibrary",false)
               }
             }
             onClick={async ()=>{
-              setShowVideoLibrary(false);global.showLibrary=false;
-              localStorage.setItem("eth.build.showLibrary",false)
             }}>
             <span style={{color:"#03a9f4"}}>eth</span>
             <span style={{position:'relative',left:-5,bottom:15,color:"#f44336",marginBottom:25}}>.</span>
