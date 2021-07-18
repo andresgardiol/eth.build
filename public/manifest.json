@@ -1,6 +1,6 @@
 {
-  "short_name": "eth.build",
-  "name": "eth.build",
+  "short_name": "aws-poc",
+  "name": "aws poc",
   "icons": [
     {
       "src": "favicon.ico",
