@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "dinamic-brand": {
+      "hosting": {
+        "apps": [
+          "aws-prototyper-poc"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "dinamic-brand"
+  }
+}
